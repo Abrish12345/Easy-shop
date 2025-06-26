@@ -60,26 +60,25 @@ public class ShoppingCartController
     // add a POST method to add a product to the cart - the url should be
     @PostMapping("/products/{productId}")
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
-    public void addToCart(@PathVariable int productId, Principal principal)
-    {
-        try{
+    public ShoppingCart addToCart(@PathVariable int productId, Principal principal) {
+        try {
             String userName = principal.getName();
             User user = userDao.getByUserName(userName);
             int userId = user.getId();
 
             shoppingCartDao.addProduct(userId, productId);
-
-        } catch (Exception e)
-        {
+            return shoppingCartDao.getByUserId(userId);
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+
     }
 
 
     // add a PUT method to update an existing product in the cart - the url should be
     @PutMapping("/product/{productId}")
-    public void updateCartItem(@PathVariable int productId, @RequestBody ShoppingCartItem item, Principal principal)
+    public ShoppingCart updateCartItem(@PathVariable int productId, @RequestBody ShoppingCartItem item, Principal principal)
     {
         try{
             String userName = principal.getName();
@@ -87,7 +86,7 @@ public class ShoppingCartController
             int userId = user.getId();
 
             shoppingCartDao.updateQuantity(userId,productId,item.getQuantity());
-
+            return shoppingCartDao.getByUserId(userId);
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -103,7 +102,7 @@ public class ShoppingCartController
 
     @DeleteMapping
 
-    public void clearCart(Principal principal)
+    public ShoppingCart clearCart(Principal principal)
     {
         try
         {
@@ -112,6 +111,8 @@ public class ShoppingCartController
             int userId = user.getId();
 
             shoppingCartDao.clearCart(userId);
+
+            return shoppingCartDao.getByUserId(userId);
         } catch (Exception e)
         {
             e.printStackTrace();

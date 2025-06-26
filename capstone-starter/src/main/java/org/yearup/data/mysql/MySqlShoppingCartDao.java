@@ -25,8 +25,9 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     @Autowired
     public MySqlShoppingCartDao(DataSource dataSource, ProductDao productDao) {
         super(dataSource);
-        this.productDao=productDao;
+        this.productDao = productDao;
     }
+
     // Retrieves all shopping cart items for the given userId
     @Override
     public ShoppingCart getByUserId(int userId) {
@@ -35,16 +36,14 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         // SQL to join shopping_cart with products to get full product info
         String sql = "SELECT  product_id, quantity FROM shopping_cart WHERE user_id = ?";
 
-        try(Connection connection = getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql))
-        {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
 
             ResultSet row = statement.executeQuery();
 
-            while (row.next())
-            {
-                int productId=row.getInt("product_id");
+            while (row.next()) {
+                int productId = row.getInt("product_id");
                 Product product = productDao.getById(productId);
 
 
@@ -55,8 +54,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
                 cart.add(item);
 
             }
-        } catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return cart;
@@ -67,18 +65,17 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     public void addProduct(int userId, int productId) {
         String updateSql = "    UPDATE shopping_cart SET quantity = quantity + 1 WHERE user_id =? AND product_id = ? ";
         String insertSql = "INSERT INTO shopping_cart (user_id, product_id,quantity) " +
-                            "SELECT ?,?,1 FROM DUAL WHERE NOT EXISTS " +
-                            "(SELECT 1 FROM shopping_cart WHERE user_id =? AND product_id = ?)";
+                "SELECT ?,?,1 FROM DUAL WHERE NOT EXISTS " +
+                "(SELECT 1 FROM shopping_cart WHERE user_id =? AND product_id = ?)";
 
-        try(Connection connection = getConnection()){
+        try (Connection connection = getConnection()) {
 
             PreparedStatement updateStmt = connection.prepareStatement(updateSql);
-            updateStmt.setInt(1,userId);
-            updateStmt.setInt(2,productId);
+            updateStmt.setInt(1, userId);
+            updateStmt.setInt(2, productId);
             int rows = updateStmt.executeUpdate();
             // If no row was updated, insert a new one
-            if (rows == 0)
-            {
+            if (rows == 0) {
                 PreparedStatement insertStmt = connection.prepareStatement(insertSql);
                 insertStmt.setInt(1, userId);
                 insertStmt.setInt(2, productId);
@@ -109,21 +106,22 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             throw new RuntimeException(e);
         }
     }
-            // Deletes all items from the user's shopping cart
-        @Override
+
+    // Deletes all items from the user's shopping cart
+    @Override
     public void clearCart(int userId) {
-            String sql = "DELETE FROM shopping_cart WHERE user_id = ? ";
+        String sql = "DELETE FROM shopping_cart WHERE user_id = ? ";
 
-            try (Connection connection = getConnection()) {
+        try (Connection connection = getConnection()) {
 
-                PreparedStatement statement = connection.prepareStatement(sql);
-                {
-                    statement.setInt(1,userId);
-                    statement.executeUpdate();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            {
+                statement.setInt(1, userId);
+                statement.executeUpdate();
 
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+    }
 }
