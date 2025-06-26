@@ -1,5 +1,6 @@
 package org.yearup.data.mysql;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.yearup.models.Product;
 import org.yearup.data.ProductDao;
@@ -13,8 +14,11 @@ import java.util.List;
 @Component
 public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
     public MySqlProductDao(DataSource dataSource) {
+
         super(dataSource);
     }
+
+
 
     @Override
     public List<Product> search(Integer categoryId, BigDecimal minPrice, BigDecimal maxPrice, String color) {
@@ -195,4 +199,5 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
 
         return new Product(productId, name, price, categoryId, description, color, stock, isFeatured, imageUrl);
     }
+
 }
