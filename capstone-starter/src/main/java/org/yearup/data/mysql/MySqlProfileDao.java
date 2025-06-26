@@ -57,11 +57,14 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
                             result.getInt("user_id"),
                             result.getString("first_name"),
                             result.getString("last_name"),
+                            result.getString("phone"),
+                            result.getString("email"),
                             result.getString("address"),
                             result.getString("city"),
                             result.getString("state"),
-                            result.getString("zip"),
-                            result.getString("phone")
+                            result.getString("zip")
+
+
                     );
                 }
                 // If no profile found, return null
@@ -76,7 +79,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
     public void update(int userId, Profile profile) {
 
         // SQL statement to update a profile by user_id
-        String sql = "UPDATE profiles SET" +
+        String sql = "UPDATE profiles SET " +
                 "first_name = ?, " +
                 "last_name = ?, " +
                 "phone = ?, " +

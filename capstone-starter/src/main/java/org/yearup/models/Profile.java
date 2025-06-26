@@ -16,21 +16,21 @@ public class Profile
     {
     }
 
-    public Profile(int userId, String firstName, String lastName, String phone, String email, String address, String city, String state, String zip)
+
+
+    public Profile(int userId, String firstName, String lastName, String phone,String email, String address, String city, String state, String zip)
     {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.email = email;
+        this.email=email;
         this.address = address;
         this.city = city;
         this.state = state;
         this.zip = zip;
     }
 
-    public Profile(int userId, String firstName, String lastName, String address, String city, String state, String zip, String phone) {
-    }
 
     public int getUserId()
     {
