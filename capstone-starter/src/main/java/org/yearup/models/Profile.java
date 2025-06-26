@@ -29,6 +29,9 @@ public class Profile
         this.zip = zip;
     }
 
+    public Profile(int userId, String firstName, String lastName, String address, String city, String state, String zip, String phone) {
+    }
+
     public int getUserId()
     {
         return userId;
