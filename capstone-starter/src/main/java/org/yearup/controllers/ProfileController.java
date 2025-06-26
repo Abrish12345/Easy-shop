@@ -2,10 +2,7 @@ package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yearup.data.ProductDao;
 import org.yearup.data.ProfileDao;
 import org.yearup.data.UserDao;
@@ -13,6 +10,7 @@ import org.yearup.models.Profile;
 import org.yearup.models.User;
 
 import java.security.Principal;
+@CrossOrigin
 //tells spring this class will handle rest API requests
 @RestController
 //maps all routes in this class to start with /profile
@@ -48,7 +46,7 @@ public class ProfileController {
     }
     // PUT /profile → updates the profile for the currently logged-in user
     @PutMapping
-    public void updateProfile(Profile profile, Principal principal){
+    public void updateProfile(@RequestBody Profile profile, Principal principal){
         // Get logged-in username
         String userName = principal.getName();
         // Find user by username
